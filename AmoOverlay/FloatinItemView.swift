@@ -7,13 +7,37 @@
 
 import UIKit
 
+class GestureDelegate: NSObject, UIGestureRecognizerDelegate {
+    var isOpen: Bool = false // Shared open/closed state
+
+    // Specify that when the view is open, only allow swipe gestures.
+        // When the view is closed, allow both pan and tap gestures.
+        func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+            if isOpen {
+                // Only allow swipe gestures when the view is open.
+                return gestureRecognizer is UISwipeGestureRecognizer
+            } else {
+                // Allow both pan and tap gestures when the view is closed.
+                return true
+            }
+        }
+}
+
 class FloatinItemView: UIView {
-    private var isOpen = false // Maintain the open/closed state
     private var originalFrame: CGRect?
+    let gestureDelegate = GestureDelegate()
+    
+    // Add a property observer to update the delegate's isOpen when FloatinItemView's isOpen changes.
+    var isOpen: Bool = false {
+        didSet {
+            gestureDelegate.isOpen = isOpen
+        }
+    }
     
     private let paddingX: CGFloat = 20 // Adjust the X-axis padding as needed
     private let paddingY: CGFloat = 20 // Adjust the Y-axis padding as needed
     private let _cornerRadius: CGFloat = 40
+
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -33,11 +57,24 @@ class FloatinItemView: UIView {
         // Add a pan gesture recognizer
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
         addGestureRecognizer(panGesture)
+        panGesture.delegate = gestureDelegate
         
         // Add a tap gesture recognizer
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
         addGestureRecognizer(tapGesture)
-    }
+        tapGesture.delegate = gestureDelegate
+        
+        // Add swipe gestures for up and down
+        let swipeUpGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeUp(_:)))
+        swipeUpGesture.direction = .up
+        addGestureRecognizer(swipeUpGesture)
+        swipeUpGesture.delegate = gestureDelegate
+        
+        let swipeDownGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeDown(_:)))
+        swipeDownGesture.direction = .down
+        addGestureRecognizer(swipeDownGesture)
+        swipeUpGesture.delegate = gestureDelegate
+}
     
     @objc private func handlePan(_ gesture: UIPanGestureRecognizer) {
         if isOpen {
@@ -49,14 +86,25 @@ class FloatinItemView: UIView {
     }
     
     @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
-        // Toggle the open/closed state
-        isOpen = !isOpen
-        
-        if isOpen {
-            openView()
-        } else {
-            closeView()
+        openView()
+        isOpen = true
+    }
+    
+    @objc private func handleSwipeDown(_ gesture: UISwipeGestureRecognizer) {
+        if !isOpen {
+            return
         }
+        
+        closeView()
+        isOpen = false
+    }
+    
+    @objc private func handleSwipeUp(_ gesture: UISwipeGestureRecognizer) {
+        if !isOpen {
+            return
+        }
+        
+        print("swipping up")
     }
     
     private func openView() {

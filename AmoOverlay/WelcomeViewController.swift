@@ -13,11 +13,9 @@ class WelcomeViewController: UIViewController {
         super.viewDidLoad()
 
         self.view.backgroundColor = .white
-
-        let label = UILabel()
-        label.text = "Hello, World!"
-        label.frame = CGRect(x: 50, y: 100, width: 200, height: 50)
-        self.view.addSubview(label)
+        
+        let floatinItemView = FloatinItemView(frame: CGRect(x: 100, y: 100, width: 200, height: 100))
+        self.view.addSubview(floatinItemView)
     }
     
 

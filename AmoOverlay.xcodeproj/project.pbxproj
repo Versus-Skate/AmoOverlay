@@ -7,19 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		859764332AAB73A80047BF34 /* FloatinItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 859764322AAB73A80047BF34 /* FloatinItemView.swift */; };
 		859B27142AAB5BA60006F788 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 859B27132AAB5BA60006F788 /* AppDelegate.swift */; };
 		859B27162AAB5BA60006F788 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 859B27152AAB5BA60006F788 /* SceneDelegate.swift */; };
 		859B271D2AAB5BA70006F788 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 859B271C2AAB5BA70006F788 /* Assets.xcassets */; };
-		859B27202AAB5BA70006F788 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 859B271E2AAB5BA70006F788 /* LaunchScreen.storyboard */; };
 		859B27282AAB62B80006F788 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 859B27272AAB62B80006F788 /* WelcomeViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		859764322AAB73A80047BF34 /* FloatinItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatinItemView.swift; sourceTree = "<group>"; };
 		859B27102AAB5BA60006F788 /* AmoOverlay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AmoOverlay.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		859B27132AAB5BA60006F788 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		859B27152AAB5BA60006F788 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		859B271C2AAB5BA70006F788 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		859B271F2AAB5BA70006F788 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		859B27212AAB5BA70006F788 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		859B27272AAB62B80006F788 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -55,10 +55,10 @@
 			isa = PBXGroup;
 			children = (
 				859B27272AAB62B80006F788 /* WelcomeViewController.swift */,
+				859764322AAB73A80047BF34 /* FloatinItemView.swift */,
 				859B27132AAB5BA60006F788 /* AppDelegate.swift */,
 				859B27152AAB5BA60006F788 /* SceneDelegate.swift */,
 				859B271C2AAB5BA70006F788 /* Assets.xcassets */,
-				859B271E2AAB5BA70006F788 /* LaunchScreen.storyboard */,
 				859B27212AAB5BA70006F788 /* Info.plist */,
 			);
 			path = AmoOverlay;
@@ -122,7 +122,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				859B27202AAB5BA70006F788 /* LaunchScreen.storyboard in Resources */,
 				859B271D2AAB5BA70006F788 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -137,21 +136,11 @@
 				859B27282AAB62B80006F788 /* WelcomeViewController.swift in Sources */,
 				859B27142AAB5BA60006F788 /* AppDelegate.swift in Sources */,
 				859B27162AAB5BA60006F788 /* SceneDelegate.swift in Sources */,
+				859764332AAB73A80047BF34 /* FloatinItemView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		859B271E2AAB5BA70006F788 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				859B271F2AAB5BA70006F788 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		859B27222AAB5BA70006F788 /* Debug */ = {
@@ -204,7 +193,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -258,7 +247,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

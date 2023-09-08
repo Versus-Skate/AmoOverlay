@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		858136A52AABC22800FBBA96 /* ScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 858136A42AABC22800FBBA96 /* ScrollView.swift */; };
 		859764332AAB73A80047BF34 /* FloatinItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 859764322AAB73A80047BF34 /* FloatinItemView.swift */; };
 		859B27142AAB5BA60006F788 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 859B27132AAB5BA60006F788 /* AppDelegate.swift */; };
 		859B27162AAB5BA60006F788 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 859B27152AAB5BA60006F788 /* SceneDelegate.swift */; };
@@ -15,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		858136A42AABC22800FBBA96 /* ScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollView.swift; sourceTree = "<group>"; };
 		859764322AAB73A80047BF34 /* FloatinItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatinItemView.swift; sourceTree = "<group>"; };
 		859B27102AAB5BA60006F788 /* AmoOverlay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AmoOverlay.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		859B27132AAB5BA60006F788 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -56,6 +58,7 @@
 			children = (
 				859B27272AAB62B80006F788 /* WelcomeViewController.swift */,
 				859764322AAB73A80047BF34 /* FloatinItemView.swift */,
+				858136A42AABC22800FBBA96 /* ScrollView.swift */,
 				859B27132AAB5BA60006F788 /* AppDelegate.swift */,
 				859B27152AAB5BA60006F788 /* SceneDelegate.swift */,
 				859B271C2AAB5BA70006F788 /* Assets.xcassets */,
@@ -136,6 +139,7 @@
 				859B27282AAB62B80006F788 /* WelcomeViewController.swift in Sources */,
 				859B27142AAB5BA60006F788 /* AppDelegate.swift in Sources */,
 				859B27162AAB5BA60006F788 /* SceneDelegate.swift in Sources */,
+				858136A52AABC22800FBBA96 /* ScrollView.swift in Sources */,
 				859764332AAB73A80047BF34 /* FloatinItemView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

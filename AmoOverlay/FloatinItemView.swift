@@ -11,6 +11,10 @@ class FloatinItemView: UIView {
     private var isOpen = false // Maintain the open/closed state
     private var originalFrame: CGRect?
     
+    private let paddingX: CGFloat = 20 // Adjust the X-axis padding as needed
+    private let paddingY: CGFloat = 20 // Adjust the Y-axis padding as needed
+    private let _cornerRadius: CGFloat = 40
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
@@ -24,6 +28,7 @@ class FloatinItemView: UIView {
     private func setup() {
         // Customize the appearance of your view here
         backgroundColor = UIColor.blue
+        layer.cornerRadius = _cornerRadius
         
         // Add a pan gesture recognizer
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
@@ -48,23 +53,34 @@ class FloatinItemView: UIView {
         isOpen = !isOpen
         
         if isOpen {
-            // If open, expand the view to take the full available width
-            originalFrame = frame
-            let newFrame = CGRect(
-                x: 0,
-                y: 0,
-                width: UIScreen.main.bounds.width,
-                height: UIScreen.main.bounds.height
-            )
-            UIView.animate(withDuration: 0.3) {
-                self.frame = newFrame
-            }
+            openView()
         } else {
-            // If closed, animate the view back to the original size
-            if let originalFrame = originalFrame {
-                UIView.animate(withDuration: 0.3) {
-                    self.frame = originalFrame
-                }
+            closeView()
+        }
+    }
+    
+    private func openView() {
+        originalFrame = frame
+        
+        let statusBarHeight = window?.windowScene?.statusBarManager?.statusBarFrame.height
+        let innerBounds = UIScreen.main.bounds.inset(by: UIEdgeInsets(top: statusBarHeight!, left: 0, bottom: 0, right: 0))
+
+        let newFrame = CGRect(
+            x: paddingX,
+            y: paddingY + statusBarHeight!, // Add statusBarHeight to the Y coordinate
+            width: innerBounds.width - (2 * paddingX),
+            height: innerBounds.height - (2 * paddingY)
+        )
+        UIView.animate(withDuration: 0.3) {
+            self.frame = newFrame
+        }
+    }
+    
+    private func closeView() {
+        // If closed, animate the view back to the original size
+        if let originalFrame = originalFrame {
+            UIView.animate(withDuration: 0.3) {
+                self.frame = originalFrame
             }
         }
     }

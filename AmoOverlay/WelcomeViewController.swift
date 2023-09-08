@@ -14,7 +14,7 @@ class WelcomeViewController: UIViewController {
 
         self.view.backgroundColor = .white
         
-        let floatinItemView = FloatinItemView(frame: CGRect(x: 100, y: 100, width: 200, height: 100))
+        let floatinItemView = FloatinItemView(frame: CGRect(x: 100, y: 100, width: 80, height: 80))
         self.view.addSubview(floatinItemView)
     }
     

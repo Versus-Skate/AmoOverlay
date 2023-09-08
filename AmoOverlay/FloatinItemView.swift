@@ -33,10 +33,11 @@ class FloatinItemView: UIView {
             gestureDelegate.isOpen = isOpen
         }
     }
+    var isExpanded: Bool = false
     
     private let paddingX: CGFloat = 20 // Adjust the X-axis padding as needed
     private let paddingY: CGFloat = 20 // Adjust the Y-axis padding as needed
-    private let _cornerRadius: CGFloat = 40
+    private let cornerRadius: CGFloat = 40
 
     
     override init(frame: CGRect) {
@@ -52,7 +53,7 @@ class FloatinItemView: UIView {
     private func setup() {
         // Customize the appearance of your view here
         backgroundColor = UIColor.blue
-        layer.cornerRadius = _cornerRadius
+        layer.cornerRadius = cornerRadius
         
         // Add a pan gesture recognizer
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
@@ -96,7 +97,6 @@ class FloatinItemView: UIView {
         }
         
         closeView()
-        isOpen = false
     }
     
     @objc private func handleSwipeUp(_ gesture: UISwipeGestureRecognizer) {
@@ -104,7 +104,7 @@ class FloatinItemView: UIView {
             return
         }
         
-        print("swipping up")
+        expandView()
     }
     
     private func openView() {
@@ -119,17 +119,47 @@ class FloatinItemView: UIView {
             width: innerBounds.width - (2 * paddingX),
             height: innerBounds.height - (2 * paddingY)
         )
-        UIView.animate(withDuration: 0.3) {
+
+        UIView.animate(withDuration: 0.3, animations: {
             self.frame = newFrame
+        }) { (_) in
+            // This closure is called when the animation is complete.
+            self.isOpen = true
         }
     }
     
     private func closeView() {
         // If closed, animate the view back to the original size
-        if let originalFrame = originalFrame {
-            UIView.animate(withDuration: 0.3) {
-                self.frame = originalFrame
-            }
+        layer.cornerRadius = cornerRadius
+        
+       if let originalFrame = originalFrame {
+           UIView.animate(withDuration: 0.3, animations: {
+               self.frame = originalFrame
+           }) { (_) in
+               // This closure is called when the animation is complete.
+               self.isOpen = false
+           }
+       }
+    }
+    
+    private func expandView() {
+        let statusBarHeight = window?.windowScene?.statusBarManager?.statusBarFrame.height
+        let innerBounds = UIScreen.main.bounds.inset(by: UIEdgeInsets(top: statusBarHeight!, left: 0, bottom: 0, right: 0))
+
+        let newFrame = CGRect(
+            x: 0,
+            y: statusBarHeight!, // Add statusBarHeight to the Y coordinate
+            width: innerBounds.width,
+            height: innerBounds.height
+        )
+        
+        layer.cornerRadius = 0
+
+        UIView.animate(withDuration: 0.3, animations: {
+            self.frame = newFrame
+        }) { (_) in
+            // This closure is called when the animation is complete.
+            self.isOpen = true
         }
     }
 }

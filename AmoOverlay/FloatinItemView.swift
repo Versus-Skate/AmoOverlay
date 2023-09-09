@@ -42,7 +42,7 @@ class GestureDelegate: NSObject, UIGestureRecognizerDelegate {
 class FloatinItemView: UIScrollView {
     private var originalFrame: CGRect?
     private var scrollView: ScrollView?
-    private var buttonView: CloseButton?
+    var buttonView: CloseButton?
     
     
     let gestureDelegate = GestureDelegate()
@@ -102,14 +102,14 @@ class FloatinItemView: UIScrollView {
         scrollView?.parentFloatingItemView = self
         addSubview(scrollView!)
         
-        buttonView = CloseButton(frame: CGRect(
-            x: CGFloat(UIScreen.main.bounds.width / 2) - 50 / 2 - 20,
-            y: CGFloat(UIScreen.main.bounds.height) - 200,
-            width: 50,
-            height: 50
-        ))
-        buttonView?.parentFloatingItemView = self
-        addSubview(buttonView!)
+//        buttonView = CloseButton(frame: CGRect(
+//            x: CGFloat(UIScreen.main.bounds.width / 2) - 50 / 2 - 20,
+//            y: CGFloat(UIScreen.main.bounds.height) - 200,
+//            width: 50,
+//            height: 50
+//        ))
+//        buttonView?.parentFloatingItemView = self
+//        addSubview(buttonView!)
     }
     
     @objc private func handlePan(_ gesture: UIPanGestureRecognizer) {
@@ -230,7 +230,6 @@ class FloatinItemView: UIScrollView {
 
         UIView.animate(withDuration: 0.3, animations: {
             self.frame = newFrame
-            self.buttonView?.frame.origin.x = newFrame.width / 2 - 50 / 2 // correct close button if was expanded
         }) { (_) in
             // This closure is called when the animation is complete.
             self.isOpen = true
@@ -241,7 +240,7 @@ class FloatinItemView: UIScrollView {
         })
         
         self.scrollView?.open(fullScreenBounds: innerBounds)
-        self.buttonView?.show(fullScreenBounds: innerBounds)
+        self.buttonView?.show()
         
     }
     
@@ -260,7 +259,6 @@ class FloatinItemView: UIScrollView {
         
         UIView.animate(withDuration: 0.3, animations: {
             self.frame = newFrame
-            self.buttonView?.frame.origin.x = newFrame.width / 2 - 50 / 2 // correct close button on expand
         }) { (_) in
             // This closure is called when the animation is complete.
             self.isExpanded = true
@@ -280,7 +278,6 @@ class FloatinItemView: UIScrollView {
         if let originalFrame = originalFrame {
             UIView.animate(withDuration: 0.3, animations: {
                 self.frame = originalFrame
-                self.buttonView?.frame.origin.x = originalFrame.width / 2 // correct close button if was expanded
         }) { (_) in
             // This closure is called when the animation is complete.
             self.isOpen = false
@@ -293,6 +290,6 @@ class FloatinItemView: UIScrollView {
         })
         
         self.scrollView?.close()
-        self.buttonView?.hide(fullScreenBounds: originalFrame!)
+        self.buttonView?.hide()
     }
 }

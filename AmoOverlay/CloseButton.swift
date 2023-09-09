@@ -7,7 +7,8 @@
 import UIKit
 
 class CloseButton: UIButton {
-    weak var parentFloatingItemView: FloatinItemView? // Reference to the parent floating item
+    weak var parentView: UIView? // Reference to the parent floating item
+    weak var floatinItemView: FloatinItemView?
     var impactFeedback: UIImpactFeedbackGenerator?
     
     override init(frame: CGRect) {
@@ -33,7 +34,8 @@ class CloseButton: UIButton {
     }
     
     @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
-        parentFloatingItemView?.closeView()
+        floatinItemView?.closeView()
+        hide()
         
         // Create and prepare the feedback generator
         impactFeedback = UIImpactFeedbackGenerator(style: .heavy)
@@ -46,17 +48,14 @@ class CloseButton: UIButton {
         impactFeedback = nil
     }
     
-    func show(fullScreenBounds: CGRect) {
-        
-        print("Should show")
-        UIView.animate(withDuration: 0.1) {
+    func show() {
+        UIView.animate(withDuration: 0.2) {
             self.layer.opacity = 1
         }
     }
     
-    func hide(fullScreenBounds: CGRect) {
-        print("Should hide")
-        UIView.animate(withDuration: 0.1) {
+    func hide() {
+        UIView.animate(withDuration: 0.2) {
             self.layer.opacity = 0
         }
     }

@@ -8,6 +8,7 @@
 import UIKit
 
 class WelcomeViewController: UIViewController {
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,7 +23,25 @@ class WelcomeViewController: UIViewController {
         
         let floatinItemView = FloatinItemView(frame: CGRect(x: 100, y: 100, width: 80, height: 80))
         self.view.addSubview(floatinItemView)
+        
+        let buttonView = CloseButton(frame: CGRect(
+            x: CGFloat(UIScreen.main.bounds.width / 2) - 50 / 2,
+            y: CGFloat(UIScreen.main.bounds.height) - 100,
+            width: 50,
+            height: 50
+        ))
+        buttonView.parentView = self.view
+        buttonView.floatinItemView = floatinItemView
+        self.view.addSubview(buttonView)
+        
+        floatinItemView.buttonView = buttonView
     }
+    
+    func open() {
+//        buttonView
+    }
+    
+    
     
 
     /*

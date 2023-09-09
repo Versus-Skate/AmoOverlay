@@ -128,12 +128,13 @@ class FloatinItemView: UIScrollView {
             
             case .began:
                 UIView.animate(
-                    withDuration: 0.2,
+                    withDuration: 0.4,
                     delay: 0,
-                    usingSpringWithDamping: 0.5,
-                    initialSpringVelocity: 0.5,
+                    usingSpringWithDamping: 0.3,
+                    initialSpringVelocity: 0.2,
+                    options: .curveEaseIn,
                     animations: {
-                        self.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+                        self.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
                     },
                     completion: nil
                 )
@@ -147,10 +148,11 @@ class FloatinItemView: UIScrollView {
 
             case .ended:
                 UIView.animate(
-                    withDuration: 0.2,
+                    withDuration: 0.4,
                     delay: 0,
-                    usingSpringWithDamping: 0.5,
-                    initialSpringVelocity: 0.5,
+                    usingSpringWithDamping: 0.3,
+                    initialSpringVelocity: 0.2,
+                    options: .curveEaseOut,
                     animations: {
                         self.transform = .identity
                     },
@@ -160,6 +162,7 @@ class FloatinItemView: UIScrollView {
             
                 let velocity = gesture.velocity(in: self.superview)
                 if velocity == .zero {
+                    impactFeedback?.impactOccurred()
                     openView()
                 }
             

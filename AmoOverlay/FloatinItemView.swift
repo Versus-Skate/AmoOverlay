@@ -47,6 +47,8 @@ class FloatinItemView: UIScrollView {
     
     let gestureDelegate = GestureDelegate()
     var impactFeedback: UIImpactFeedbackGenerator?
+    var impactFeedbackHeavy: UIImpactFeedbackGenerator?
+    var impactFeedbackLight: UIImpactFeedbackGenerator?
     
     private let paddingX: CGFloat = 20 // Adjust the X-axis padding as needed
     private let paddingY: CGFloat = 20 // Adjust the Y-axis padding as needed
@@ -101,15 +103,7 @@ class FloatinItemView: UIScrollView {
         scrollView = ScrollView(frame: CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height))
         scrollView?.parentFloatingItemView = self
         addSubview(scrollView!)
-        
-//        buttonView = CloseButton(frame: CGRect(
-//            x: CGFloat(UIScreen.main.bounds.width / 2) - 50 / 2 - 20,
-//            y: CGFloat(UIScreen.main.bounds.height) - 200,
-//            width: 50,
-//            height: 50
-//        ))
-//        buttonView?.parentFloatingItemView = self
-//        addSubview(buttonView!)
+
     }
     
     @objc private func handlePan(_ gesture: UIPanGestureRecognizer) {
@@ -120,6 +114,10 @@ class FloatinItemView: UIScrollView {
         
         impactFeedback = UIImpactFeedbackGenerator(style: .medium)
         impactFeedback?.prepare()
+        impactFeedbackHeavy = UIImpactFeedbackGenerator(style: .heavy)
+        impactFeedbackHeavy?.prepare()
+        impactFeedbackLight = UIImpactFeedbackGenerator(style: .light)
+        impactFeedbackLight?.prepare()
         
         switch gesture.state {
             
@@ -141,7 +139,16 @@ class FloatinItemView: UIScrollView {
 
             case .changed:
                 // Gesture is in progress
-                impactFeedback?.impactOccurred()
+                let velocity = gesture.velocity(in: self.superview)
+            
+                if velocity.y > 500 {
+                    impactFeedbackHeavy?.impactOccurred()
+                } else if velocity.y > 100 {
+                    impactFeedback?.impactOccurred()
+                } else {
+                    // Low velocity, use a light impact style
+                    impactFeedbackLight?.impactOccurred()
+                }
 
             case .ended:
                 UIView.animate(

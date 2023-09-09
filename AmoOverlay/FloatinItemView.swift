@@ -148,7 +148,7 @@ class FloatinItemView: UIScrollView {
 
             case .ended:
                 UIView.animate(
-                    withDuration: 0.4,
+                    withDuration: 0.1,
                     delay: 0,
                     usingSpringWithDamping: 0.3,
                     initialSpringVelocity: 0.2,

@@ -12,7 +12,13 @@ class WelcomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.view.backgroundColor = .white
+        let _backgroundColor = UIColor(
+            red: CGFloat(0) / 255.0,
+            green: CGFloat(0) / 255.0,
+            blue: CGFloat(0) / 255.0,
+            alpha: 0
+        )
+        self.view.backgroundColor = _backgroundColor
         
         let floatinItemView = FloatinItemView(frame: CGRect(x: 100, y: 100, width: 80, height: 80))
         self.view.addSubview(floatinItemView)

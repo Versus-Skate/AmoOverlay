@@ -80,6 +80,8 @@ class FloatinItemView: UIScrollView {
         // Customize the appearance of your view here
         layer.cornerRadius = cornerRadius
         
+        backgroundColor = .cyan
+        
         // Add a pan gesture recognizer
         let panGesture = ImmediatePanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
         addGestureRecognizer(panGesture)
@@ -96,7 +98,7 @@ class FloatinItemView: UIScrollView {
         addGestureRecognizer(swipeDownGesture)
         swipeUpGesture.delegate = gestureDelegate
         
-        scrollView = ScrollView(frame: bounds)
+        scrollView = ScrollView(frame: CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height))
         scrollView?.parentFloatingItemView = self
         addSubview(scrollView!)
         
@@ -158,7 +160,6 @@ class FloatinItemView: UIScrollView {
                     },
                     completion: nil
                 )
-            
             
                 let velocity = gesture.velocity(in: self.superview)
                 if velocity == .zero {

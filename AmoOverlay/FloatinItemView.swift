@@ -61,16 +61,6 @@ class FloatinItemView: UIScrollView {
         setup()
     }
     
-    override func layoutSubviews() {
-        // Ensure scroll view will auto resize
-        print("layoutSubviews is called in FloatingItem")
-        super.layoutSubviews()
-
-        UIView.animate(withDuration: 0.3, animations: {
-            self.scrollView!.frame = self.bounds
-        })
-    }
-    
     private func setup() {
         // Customize the appearance of your view here
         backgroundColor = UIColor.blue
@@ -156,6 +146,10 @@ class FloatinItemView: UIScrollView {
             self.isOpen = true
         }
         
+        UIView.animate(withDuration: 0.3, animations: {
+            self.scrollView!.frame = self.bounds
+        })
+        
         self.scrollView?.open(fullScreenBounds: innerBounds)
     }
     
@@ -179,6 +173,10 @@ class FloatinItemView: UIScrollView {
             self.isExpanded = true
         }
         
+        UIView.animate(withDuration: 0.3, animations: {
+            self.scrollView!.frame = self.bounds
+        })
+        
         self.scrollView?.expand()
     }
     
@@ -196,6 +194,10 @@ class FloatinItemView: UIScrollView {
             self.isExpanded = false
             }
         }
+        
+        UIView.animate(withDuration: 0.3, animations: {
+            self.scrollView!.frame = self.bounds
+        })
         
         self.scrollView?.close()
     }

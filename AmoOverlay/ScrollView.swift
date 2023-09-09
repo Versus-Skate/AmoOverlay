@@ -5,17 +5,10 @@ class GestureDelegateScroll: NSObject, UIGestureRecognizerDelegate {
     var isOpen: Bool = false // Shared open/closed state
     var isExpanded: Bool = false // Shared open/closed state
 
-    // Specify that when the view is open, only allow swipe gestures.
-    // When the view is closed, allow both pan and tap gestures.
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        if isExpanded {
-            return gestureRecognizer is UISwipeGestureRecognizer
-        }
         if isOpen {
-            // Only allow swipe gestures when the view is open.
             return false
         } else {
-            // Allow both pan and tap gestures when the view is closed.
             return true
         }
     }
@@ -49,17 +42,12 @@ class ScrollView: UIScrollView {
         super.init(coder: aDecoder)
         setup()
     }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        print("layoutSubviews is called in Scrollview")
-    }
 
     private func setup() {
         isScrollEnabled = false
         isPagingEnabled = true
         showsVerticalScrollIndicator = false
+        showsHorizontalScrollIndicator = false
         delegate = self
         
         backgroundColor = .yellow
@@ -82,17 +70,12 @@ class ScrollView: UIScrollView {
     }
     
     func open(fullScreenBounds: CGRect) {
-
         for i in 0..<3 { // Create 3 pages
             let pageY = CGFloat(i) * fullScreenBounds.height // Calculate the Y position for each page
-            // Set the frame of the subview[i] to its desired position
-            print(fullScreenBounds.width)
             subviews[i].frame = CGRect(x: 0, y: pageY, width: fullScreenBounds.width, height: fullScreenBounds.height)
         }
         
         contentSize = CGSize(width: fullScreenBounds.width, height: fullScreenBounds.height * CGFloat(3))
-        
-        
     }
     
     func expand() {

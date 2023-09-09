@@ -25,7 +25,14 @@ class CloseButton: UIButton {
         setTitle("✕", for: .normal)
         setTitleColor(.white, for: .normal)
         titleLabel?.font = .boldSystemFont(ofSize: 20)
-        backgroundColor = .red // Customize the background color as needed
+        let _backgroundColor = UIColor(
+            red: CGFloat(0) / 255.0,
+            green: CGFloat(0) / 255.0,
+            blue: CGFloat(0) / 255.0,
+            alpha: 0.4
+        )
+        backgroundColor = _backgroundColor
+        
         layer.cornerRadius = bounds.width / 2 // Make it a circle, adjust the radius as needed
         layer.opacity = 0
         

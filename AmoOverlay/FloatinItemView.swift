@@ -102,11 +102,6 @@ class FloatinItemView: UIScrollView {
         scrollView?.parentFloatingItemView = self
         addSubview(scrollView!)
         
-        buttonView = CloseButton(frame: CGRect.zero)
-        buttonView?.parentFloatingItemView = self
-        buttonView?.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(buttonView!)
-        
         buttonView = CloseButton(frame: CGRect(
             x: CGFloat(UIScreen.main.bounds.width / 2) - 50 / 2 - 20,
             y: CGFloat(UIScreen.main.bounds.height) - 200,

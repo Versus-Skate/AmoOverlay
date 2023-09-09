@@ -7,6 +7,19 @@
 
 import UIKit
 
+import UIKit.UIGestureRecognizerSubclass
+
+class ImmediatePanGestureRecognizer: UIPanGestureRecognizer {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
+        super.touchesBegan(touches, with: event)
+        
+        // Start recognizing the pan gesture immediately upon touch down
+        if state == .possible {
+            state = .began
+        }
+    }
+}
+
 class GestureDelegate: NSObject, UIGestureRecognizerDelegate {
     var isOpen: Bool = false // Shared open/closed state
     var isExpanded: Bool = false // Shared open/closed state
@@ -21,7 +34,6 @@ class GestureDelegate: NSObject, UIGestureRecognizerDelegate {
             // Only allow swipe gestures when the view is open.
             return gestureRecognizer is UISwipeGestureRecognizer
         } else {
-            // Allow both pan and tap gestures when the view is closed.
             return true
         }
     }
@@ -69,14 +81,9 @@ class FloatinItemView: UIScrollView {
         layer.cornerRadius = cornerRadius
         
         // Add a pan gesture recognizer
-        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
+        let panGesture = ImmediatePanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
         addGestureRecognizer(panGesture)
         panGesture.delegate = gestureDelegate
-        
-        // Add a tap gesture recognizer
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
-        addGestureRecognizer(tapGesture)
-        tapGesture.delegate = gestureDelegate
         
         // Add swipe gestures for up and down
         let swipeUpGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeUp(_:)))
@@ -109,46 +116,64 @@ class FloatinItemView: UIScrollView {
     }
     
     @objc private func handlePan(_ gesture: UIPanGestureRecognizer) {
+        
         if isOpen {
             return
         }
-
+        
+        impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+        impactFeedback?.prepare()
+        
         switch gesture.state {
-        case .began:
-            // Gesture started, create and prepare the feedback generator
-            impactFeedback = UIImpactFeedbackGenerator(style: .medium)
-            impactFeedback?.prepare()
+            
+            case .began:
+                UIView.animate(
+                    withDuration: 0.2,
+                    delay: 0,
+                    usingSpringWithDamping: 0.5,
+                    initialSpringVelocity: 0.5,
+                    animations: {
+                        self.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+                    },
+                    completion: nil
+                )
+            
+                // Gesture started, create and prepare the feedback generator
+                impactFeedback?.impactOccurred()
 
-        case .changed:
-            // Gesture is in progress
-            impactFeedback?.impactOccurred()
+            case .changed:
+                // Gesture is in progress
+                impactFeedback?.impactOccurred()
 
-        case .ended:
-            // Gesture ended, clean up the feedback generator
-            impactFeedback = nil
+            case .ended:
+                UIView.animate(
+                    withDuration: 0.2,
+                    delay: 0,
+                    usingSpringWithDamping: 0.5,
+                    initialSpringVelocity: 0.5,
+                    animations: {
+                        self.transform = .identity
+                    },
+                    completion: nil
+                )
+            
+            
+                let velocity = gesture.velocity(in: self.superview)
+                if velocity == .zero {
+                    openView()
+                }
+            
+                // Gesture ended, clean up the feedback generator
+                impactFeedback = nil
 
-        default:
-            break
+            default:
+                break
         }
         
         
         let translation = gesture.translation(in: self.superview)
         center = CGPoint(x: center.x + translation.x, y: center.y + translation.y)
         gesture.setTranslation(.zero, in: self.superview)
-    }
-    
-    @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
-        openView()
-        
-        // Create and prepare the feedback generator
-        impactFeedback = UIImpactFeedbackGenerator(style: .heavy)
-        impactFeedback?.prepare()
-
-        // Trigger the impact feedback
-        impactFeedback?.impactOccurred()
-
-        // Clean up the feedback generator
-        impactFeedback = nil
     }
     
     @objc private func handleSwipeDown(_ gesture: UISwipeGestureRecognizer) {

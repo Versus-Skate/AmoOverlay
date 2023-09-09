@@ -64,6 +64,12 @@ class FloatinItemView: UIScrollView {
         setup()
     }
     
+    override func layoutSubviews() {
+        // Ensure scroll view will auto resize
+        super.layoutSubviews()
+        scrollView!.frame = bounds
+    }
+    
     private func setup() {
         // Customize the appearance of your view here
         backgroundColor = UIColor.blue
@@ -93,7 +99,6 @@ class FloatinItemView: UIScrollView {
         scrollView = ScrollView(frame: bounds)
         scrollView?.parentFloatingItemView = self
         addSubview(scrollView!)
-        
     }
     
     @objc private func handlePan(_ gesture: UIPanGestureRecognizer) {
@@ -153,24 +158,6 @@ class FloatinItemView: UIScrollView {
         self.scrollView?.open()
     }
     
-    func closeView() {
-        print("Call close view")
-        // If closed, animate the view back to the original size
-        layer.cornerRadius = cornerRadius
-        
-        if let originalFrame = originalFrame {
-            UIView.animate(withDuration: 0.3, animations: {
-                self.frame = originalFrame
-        }) { (_) in
-            // This closure is called when the animation is complete.
-            self.isOpen = false
-            self.isExpanded = false
-            }
-        }
-        
-        self.scrollView?.close()
-    }
-    
     private func expandView() {
         let statusBarHeight = window?.windowScene?.statusBarManager?.statusBarFrame.height
         let innerBounds = UIScreen.main.bounds.inset(by: UIEdgeInsets(top: statusBarHeight!, left: 0, bottom: 0, right: 0))
@@ -192,5 +179,23 @@ class FloatinItemView: UIScrollView {
         }
         
         self.scrollView?.expand()
+    }
+    
+    func closeView() {
+        print("Call close view")
+        // If closed, animate the view back to the original size
+        layer.cornerRadius = cornerRadius
+        
+        if let originalFrame = originalFrame {
+            UIView.animate(withDuration: 0.3, animations: {
+                self.frame = originalFrame
+        }) { (_) in
+            // This closure is called when the animation is complete.
+            self.isOpen = false
+            self.isExpanded = false
+            }
+        }
+        
+        self.scrollView?.close()
     }
 }

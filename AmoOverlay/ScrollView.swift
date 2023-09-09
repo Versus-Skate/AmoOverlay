@@ -61,6 +61,8 @@ class ScrollView: UIScrollView {
         // Add your content pages here
         let pageWidth = frame.width
         let pageHeight = frame.height
+        print(pageWidth)
+        print(pageHeight)
 
         for i in 0..<3 { // Create 3 pages
             let pageFrame = CGRect(x: 0, y: CGFloat(i) * pageHeight, width: pageWidth, height: pageHeight)
@@ -74,30 +76,14 @@ class ScrollView: UIScrollView {
     }
     
     func open() {
+//
+
+
+        for i in 0..<3 { // Create 3 pages
+
+        }
+//                contentSize = CGSize(width: newFrame.width, height: newFrame.height * CGFloat(3))
         
-//        let newFrame = CGRect(
-//            x: 0,
-//            y: 0, // Add statusBarHeight to the Y coordinate
-//            width: 1000,
-//            height: 1000
-//        )
-//        
-//        UIView.animate(withDuration: 0.3, animations: {
-//            self.frame = newFrame
-//            self.subviews[self.currentPageIndex].frame = newFrame
-//        })
-//        
-//        let pageWidth = newFrame.width
-//        let pageHeight = newFrame.height
-//        
-//        for i in 0..<3 { // Create 3 pages
-//            let pageFrame = CGRect(x: 0, y: CGFloat(i) * pageHeight, width: pageWidth, height: pageHeight)
-//            let pageView = UIView(frame: pageFrame)
-//            pageView.backgroundColor = UIColor(red: CGFloat(i) / 3.0, green: 0.5, blue: 0.8, alpha: 1.0) // Random background color for demonstration
-//            addSubview(pageView)
-//        }
-//        
-//        self.contentSize = CGSize(width: newFrame.width, height: newFrame.height * CGFloat(3))
     }
     
     func expand() {

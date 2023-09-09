@@ -66,7 +66,6 @@ class FloatinItemView: UIScrollView {
     
     private func setup() {
         // Customize the appearance of your view here
-        backgroundColor = UIColor.blue
         layer.cornerRadius = cornerRadius
         
         // Add a pan gesture recognizer

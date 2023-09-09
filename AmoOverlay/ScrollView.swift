@@ -52,8 +52,6 @@ class ScrollView: UIScrollView {
         showsHorizontalScrollIndicator = false
         delegate = self
         
-        backgroundColor = .yellow
-        
         // Add your content pages here
         let pageWidth = frame.width
         let pageHeight = frame.height

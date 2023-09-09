@@ -48,13 +48,6 @@ class FloatinItemView: UIScrollView {
     var isExpanded: Bool = false {
         didSet {
             gestureDelegate.isExpanded = isExpanded
-            
-            if isExpanded {
-                // Show the scroll view when expanding
-                scrollView = ScrollView(frame: bounds)
-                scrollView?.parentFloatingItemView = self
-                addSubview(scrollView!)
-            }
         }
     }
     
@@ -97,6 +90,10 @@ class FloatinItemView: UIScrollView {
         addGestureRecognizer(swipeDownGesture)
         swipeUpGesture.delegate = gestureDelegate
         
+        scrollView = ScrollView(frame: bounds)
+        scrollView?.parentFloatingItemView = self
+        addSubview(scrollView!)
+        
     }
     
     @objc private func handlePan(_ gesture: UIPanGestureRecognizer) {
@@ -110,7 +107,6 @@ class FloatinItemView: UIScrollView {
     
     @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
         openView()
-        isOpen = true
     }
     
     @objc private func handleSwipeDown(_ gesture: UISwipeGestureRecognizer) {
@@ -153,6 +149,8 @@ class FloatinItemView: UIScrollView {
             // This closure is called when the animation is complete.
             self.isOpen = true
         }
+        
+        self.scrollView?.open()
     }
     
     func closeView() {
@@ -167,11 +165,10 @@ class FloatinItemView: UIScrollView {
             // This closure is called when the animation is complete.
             self.isOpen = false
             self.isExpanded = false
-
-            self.scrollView?.removeFromSuperview()
-            self.scrollView = nil
             }
         }
+        
+        self.scrollView?.close()
     }
     
     private func expandView() {
@@ -193,5 +190,7 @@ class FloatinItemView: UIScrollView {
             // This closure is called when the animation is complete.
             self.isExpanded = true
         }
+        
+        self.scrollView?.expand()
     }
 }

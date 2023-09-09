@@ -20,6 +20,8 @@ class ScrollView: UIScrollView {
     private let closeThreshold: CGFloat = 0.8 // Adjust the threshold as needed (0.8 means 80% of the page must be visible)
     private var currentPageIndex: Int = 0
     
+    var impactFeedback: UIImpactFeedbackGenerator?
+    
     let gestureDelegate = GestureDelegateScroll()
     
     var isOpen: Bool = false {
@@ -86,6 +88,18 @@ class ScrollView: UIScrollView {
 }
 
 extension ScrollView: UIScrollViewDelegate {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        // Create and prepare the feedback generator
+        impactFeedback = UIImpactFeedbackGenerator(style: .heavy)
+        impactFeedback?.prepare()
+
+        // Trigger the impact feedback
+        impactFeedback?.impactOccurred()
+
+        // Clean up the feedback generator
+        impactFeedback = nil
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         // Calculate the current page index based on the content offset
         let pageHeight = frame.height

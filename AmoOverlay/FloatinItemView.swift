@@ -32,7 +32,9 @@ class FloatinItemView: UIScrollView {
     private var scrollView: ScrollView?
     private var buttonView: CloseButton?
     
+    
     let gestureDelegate = GestureDelegate()
+    var impactFeedback: UIImpactFeedbackGenerator?
     
     private let paddingX: CGFloat = 20 // Adjust the X-axis padding as needed
     private let paddingY: CGFloat = 20 // Adjust the Y-axis padding as needed
@@ -111,6 +113,26 @@ class FloatinItemView: UIScrollView {
         if isOpen {
             return
         }
+
+        switch gesture.state {
+        case .began:
+            // Gesture started, create and prepare the feedback generator
+            impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+            impactFeedback?.prepare()
+
+        case .changed:
+            // Gesture is in progress
+            impactFeedback?.impactOccurred()
+
+        case .ended:
+            // Gesture ended, clean up the feedback generator
+            impactFeedback = nil
+
+        default:
+            break
+        }
+        
+        
         let translation = gesture.translation(in: self.superview)
         center = CGPoint(x: center.x + translation.x, y: center.y + translation.y)
         gesture.setTranslation(.zero, in: self.superview)
@@ -118,12 +140,32 @@ class FloatinItemView: UIScrollView {
     
     @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
         openView()
+        
+        // Create and prepare the feedback generator
+        impactFeedback = UIImpactFeedbackGenerator(style: .heavy)
+        impactFeedback?.prepare()
+
+        // Trigger the impact feedback
+        impactFeedback?.impactOccurred()
+
+        // Clean up the feedback generator
+        impactFeedback = nil
     }
     
     @objc private func handleSwipeDown(_ gesture: UISwipeGestureRecognizer) {
         if !isOpen {
             return
         }
+        
+        // Create and prepare the feedback generator
+        impactFeedback = UIImpactFeedbackGenerator(style: .heavy)
+        impactFeedback?.prepare()
+
+        // Trigger the impact feedback
+        impactFeedback?.impactOccurred()
+
+        // Clean up the feedback generator
+        impactFeedback = nil
         
         closeView()
     }
@@ -133,6 +175,15 @@ class FloatinItemView: UIScrollView {
             return
         }
         
+        // Create and prepare the feedback generator
+        impactFeedback = UIImpactFeedbackGenerator(style: .heavy)
+        impactFeedback?.prepare()
+
+        // Trigger the impact feedback
+        impactFeedback?.impactOccurred()
+
+        // Clean up the feedback generator
+        impactFeedback = nil
         
         if !isExpanded {
             expandView()
@@ -200,7 +251,6 @@ class FloatinItemView: UIScrollView {
     }
     
     func closeView() {
-        print("Call close view")
         // If closed, animate the view back to the original size
         layer.cornerRadius = cornerRadius
         

@@ -232,11 +232,12 @@ class FloatinItemView: UIScrollView {
             x: paddingX,
             y: paddingY + statusBarHeight!, // Add statusBarHeight to the Y coordinate
             width: innerBounds.width - (2 * paddingX),
-            height: innerBounds.height - (2 * paddingY)
+            height: innerBounds.height - (2 * paddingY)   
         )
 
         UIView.animate(withDuration: 0.3, animations: {
             self.frame = newFrame
+            self.layer.cornerRadius = self.cornerRadius / 2
         }) { (_) in
             // This closure is called when the animation is complete.
             self.isOpen = true

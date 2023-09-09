@@ -9,6 +9,10 @@ import UIKit
 
 class WelcomeViewController: UIViewController {
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .darkContent
+    }
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,9 +41,6 @@ class WelcomeViewController: UIViewController {
         floatinItemView.buttonView = buttonView
     }
     
-    func open() {
-//        buttonView
-    }
     
     
     

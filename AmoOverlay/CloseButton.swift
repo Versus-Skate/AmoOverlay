@@ -9,7 +9,8 @@ import UIKit
 class CloseButton: UIButton {
     weak var parentView: UIView? // Reference to the parent floating item
     weak var floatinItemView: FloatinItemView?
-    var impactFeedback: UIImpactFeedbackGenerator?
+    var impactFeedbackLight: UIImpactFeedbackGenerator?
+    var impactFeedbackHeavy: UIImpactFeedbackGenerator?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -36,23 +37,28 @@ class CloseButton: UIButton {
         layer.cornerRadius = bounds.width / 2 // Make it a circle, adjust the radius as needed
         layer.opacity = 0
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
-        addGestureRecognizer(tapGesture)
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
+        longPressGesture.minimumPressDuration = 0
+        addGestureRecognizer(longPressGesture)
     }
     
-    @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
-        floatinItemView?.closeView()
-        hide()
+    @objc private func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
+        impactFeedbackLight = UIImpactFeedbackGenerator(style: .light)
+        impactFeedbackHeavy = UIImpactFeedbackGenerator(style: .heavy)
         
-        // Create and prepare the feedback generator
-        impactFeedback = UIImpactFeedbackGenerator(style: .heavy)
-        impactFeedback?.prepare()
-
-        // Trigger the impact feedback
-        impactFeedback?.impactOccurred()
-
+        if gesture.state == .began {
+            // Feedback when the user touches down
+            impactFeedbackLight?.impactOccurred()
+        } else if gesture.state == .ended {
+            // Handle the long press ended event
+            floatinItemView?.closeView()
+            impactFeedbackHeavy?.impactOccurred()
+            hide()
+        }
+        
         // Clean up the feedback generator
-        impactFeedback = nil
+        impactFeedbackLight = nil
+        impactFeedbackHeavy = nil
     }
     
     func show() {

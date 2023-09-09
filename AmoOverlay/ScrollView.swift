@@ -52,7 +52,13 @@ class ScrollView: UIScrollView {
         showsHorizontalScrollIndicator = false
         delegate = self
         
-        backgroundColor = .orange
+        let _backgroundColor = UIColor(
+            red: CGFloat(0) / 255.0,
+            green: CGFloat(0) / 255.0,
+            blue: CGFloat(0) / 255.0,
+            alpha: 1
+        )
+        backgroundColor = _backgroundColor
         
         // Add your content pages here
         let pageWidth = frame.width
@@ -62,6 +68,7 @@ class ScrollView: UIScrollView {
             let pageFrame = CGRect(x: 0, y: CGFloat(i) * pageHeight, width: pageWidth, height: pageHeight)
             let pageView = UIView(frame: pageFrame)
             pageView.backgroundColor = UIColor(red: CGFloat(i) / 3.0, green: 0.5, blue: 0.8, alpha: 1.0) // Random background color for demonstration
+            pageView.layer.cornerRadius = 0
             addSubview(pageView)
         }
         
@@ -73,12 +80,14 @@ class ScrollView: UIScrollView {
         for i in 0..<3 { // Create 3 pages
             let pageY = CGFloat(i) * fullScreenBounds.height // Calculate the Y position for each page
             subviews[i].frame = CGRect(x: 0, y: pageY, width: fullScreenBounds.width, height: fullScreenBounds.height)
+            subviews[i].layer.cornerRadius = 0
         }
         
         contentSize = CGSize(width: fullScreenBounds.width, height: fullScreenBounds.height * CGFloat(3))
     }
     
     func expand() {
+        
         isScrollEnabled = true
     }
     
@@ -111,12 +120,16 @@ extension ScrollView: UIScrollViewDelegate {
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         
-        if currentPageIndex == 2 && velocity.y > 0 {
-            parentFloatingItemView?.closeView()
-        }
-    
         if currentPageIndex == 0 && velocity.y < 0 {
             parentFloatingItemView?.closeView()
         }
+        
+        if currentPageIndex == 2 && velocity.y > 0 {
+            parentFloatingItemView?.closeView()
+        }
+
     }
+
 }
+
+

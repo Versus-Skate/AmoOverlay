@@ -55,8 +55,6 @@ class ScrollView: UIScrollView {
         // Add your content pages here
         let pageWidth = frame.width
         let pageHeight = frame.height
-        print(pageWidth)
-        print(pageHeight)
 
         for i in 0..<3 { // Create 3 pages
             let pageFrame = CGRect(x: 0, y: CGFloat(i) * pageHeight, width: pageWidth, height: pageHeight)

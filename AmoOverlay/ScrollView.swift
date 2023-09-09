@@ -49,6 +49,12 @@ class ScrollView: UIScrollView {
         super.init(coder: aDecoder)
         setup()
     }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        print("layoutSubviews is called in Scrollview")
+    }
 
     private func setup() {
         isScrollEnabled = false
@@ -75,14 +81,17 @@ class ScrollView: UIScrollView {
         contentSize = CGSize(width: frame.width, height: frame.height * CGFloat(3))
     }
     
-    func open() {
-//
-
+    func open(fullScreenBounds: CGRect) {
 
         for i in 0..<3 { // Create 3 pages
-
+            let pageY = CGFloat(i) * fullScreenBounds.height // Calculate the Y position for each page
+            // Set the frame of the subview[i] to its desired position
+            print(fullScreenBounds.width)
+            subviews[i].frame = CGRect(x: 0, y: pageY, width: fullScreenBounds.width, height: fullScreenBounds.height)
         }
-//                contentSize = CGSize(width: newFrame.width, height: newFrame.height * CGFloat(3))
+        
+        contentSize = CGSize(width: fullScreenBounds.width, height: fullScreenBounds.height * CGFloat(3))
+        
         
     }
     

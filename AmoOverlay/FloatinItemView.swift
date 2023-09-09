@@ -51,9 +51,6 @@ class FloatinItemView: UIScrollView {
         }
     }
     
-    
-
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
@@ -66,8 +63,12 @@ class FloatinItemView: UIScrollView {
     
     override func layoutSubviews() {
         // Ensure scroll view will auto resize
+        print("layoutSubviews is called in FloatingItem")
         super.layoutSubviews()
-        scrollView!.frame = bounds
+
+        UIView.animate(withDuration: 0.3, animations: {
+            self.scrollView!.frame = self.bounds
+        })
     }
     
     private func setup() {
@@ -155,7 +156,7 @@ class FloatinItemView: UIScrollView {
             self.isOpen = true
         }
         
-        self.scrollView?.open()
+        self.scrollView?.open(fullScreenBounds: innerBounds)
     }
     
     private func expandView() {

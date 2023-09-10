@@ -18,7 +18,8 @@ class GestureDelegateScroll: NSObject, UIGestureRecognizerDelegate {
 let PAGES = [
     UIColor(red: CGFloat(0) / 3.0, green: 0.5, blue: 0.8, alpha: 1.0),
     UIColor(red: CGFloat(1) / 3.0, green: 0.5, blue: 0.8, alpha: 1.0),
-    UIColor(red: CGFloat(2) / 3.0, green: 0.5, blue: 0.8, alpha: 1.0)
+    UIColor(red: CGFloat(2) / 3.0, green: 0.5, blue: 0.8, alpha: 1.0),
+    UIColor(red: CGFloat(3) / 3.0, green: 0.5, blue: 0.8, alpha: 1.0)
 ]
 
 

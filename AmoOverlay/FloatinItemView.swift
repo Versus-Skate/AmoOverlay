@@ -90,6 +90,7 @@ class FloatinItemView: UIScrollView {
         )
         backgroundColor = _backgroundColor
         clipsToBounds = true // we will handle closing animations with this view cornerRadius -> we need to clips subview to bounds
+        layer.masksToBounds = true // Ensures content inside is also clipped to the rounded corners
         
         // Add a pan gesture recognizer
         let panGesture = ImmediatePanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
@@ -107,7 +108,8 @@ class FloatinItemView: UIScrollView {
         addGestureRecognizer(swipeDownGesture)
         swipeUpGesture.delegate = gestureDelegate
         
-        scrollView = ScrollView(frame: CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height))
+        // Set scrollview to screen height and width => only this container will change size
+        scrollView = ScrollView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
         scrollView?.parentFloatingItemView = self
         addSubview(scrollView!)
     }
@@ -245,19 +247,22 @@ class FloatinItemView: UIScrollView {
             height: innerBounds.height - (2 * paddingY)
         )
 
-        UIView.animate(withDuration: 0.3, animations: {
-            self.frame = newFrame
-            self.layer.cornerRadius = self.cornerRadius / 2
-        }) { (_) in
+        UIView.animate(
+            withDuration: 0.3,
+            delay: 0,
+            usingSpringWithDamping: 0.8,
+            initialSpringVelocity: 0,
+            options: .curveEaseIn,
+            animations: {
+                self.frame = newFrame
+                self.layer.cornerRadius = self.cornerRadius / 2
+            }
+        ) { (_) in
             // This closure is called when the animation is complete.
             self.isOpen = true
         }
         
-        UIView.animate(withDuration: 0.3, animations: {
-            self.scrollView!.frame = self.bounds
-        })
-        
-        self.scrollView?.open(fullScreenBounds: innerBounds)
+        self.scrollView?.open()
         self.buttonView?.show()
         
     }
@@ -273,10 +278,13 @@ class FloatinItemView: UIScrollView {
             height: innerBounds.height
         )
         
-        UIView.animate(withDuration: 0.3, animations: {
-            self.frame = newFrame
-            self.layer.cornerRadius = 0
-        }) { (_) in
+        UIView.animate(
+            withDuration: 0.2,
+            animations: {
+                self.frame = newFrame
+                self.layer.cornerRadius = 0
+            }
+        ) { (_) in
             // This closure is called when the animation is complete.
             self.isExpanded = true
         }
@@ -290,18 +298,18 @@ class FloatinItemView: UIScrollView {
     
     func closeView() {
         
-        UIView.animate(withDuration: 0.3, animations: {
-            // Apply a transform to scale the view down from its center
-            self.transform = CGAffineTransform(scaleX: 0.2, y: 0.1)
-            self.frame.origin = self.originalFrame!.origin
-            self.layer.cornerRadius = self.cornerRadius * 5
+        self.layer.cornerRadius = 20 // decrease the fact that the height dimishes more rapidly than the cornerRadius
+        if let originalFrame = originalFrame {
+            UIView.animate(withDuration: 0.3, animations: {
+                self.frame = originalFrame
+                self.layer.cornerRadius = self.cornerRadius
+                self.layer.masksToBounds = true // Ensures content inside is also clipped to the rounded corners
+
         }) { (_) in
-            // This completion block is called when the animation completes
-            self.transform = .identity
-            self.frame = self.originalFrame!
-            self.layer.cornerRadius = self.cornerRadius
-            self.isOpen = false
-            self.isExpanded = false
+                // This closure is called when the animation is complete.
+                self.isOpen = false
+                self.isExpanded = false
+            }
         }
         
         self.scrollView?.close()

@@ -59,6 +59,7 @@ class ScrollView: UIScrollView {
         showsHorizontalScrollIndicator = false
         delegate = self
         contentInset = .zero
+        clipsToBounds = true
 
         
         let _backgroundColor = UIColor(
@@ -70,9 +71,8 @@ class ScrollView: UIScrollView {
         
         backgroundColor = _backgroundColor
         
-        // Add your content pages here
-        let pageWidth = frame.width
-        let pageHeight = frame.height
+        let pageWidth = UIScreen.main.bounds.width
+        let pageHeight = UIScreen.main.bounds.height
 
         for i in 0..<PAGES.count  { // Create 3 pages
             let pageFrame = CGRect(x: 0, y: CGFloat(i) * pageHeight, width: pageWidth, height: pageHeight)
@@ -83,21 +83,26 @@ class ScrollView: UIScrollView {
         }
         
         // Set the content size to accommodate all pages
-        contentSize = CGSize(width: frame.width, height: frame.height * CGFloat(3))
+        contentSize = CGSize(width: pageWidth, height: pageHeight * CGFloat(3))
     }
     
-    func open(fullScreenBounds: CGRect) {
-        for i in 0..<PAGES.count { // Update pages
-            let pageY = CGFloat(i) * fullScreenBounds.height // Calculate the Y position for each page
-            subviews[i].frame = CGRect(x: 0, y: pageY, width: fullScreenBounds.width, height: fullScreenBounds.height)
-            subviews[i].layer.cornerRadius = 0
-        }
-        
-        contentSize = CGSize(width: fullScreenBounds.width, height: fullScreenBounds.height * CGFloat(PAGES.count))
+    func open() {
+        isOpen = true
     }
     
     func expand() {
         isScrollEnabled = true
+        
+        // At expand, we need to adapt position of pages for scrolling
+        let statusBarHeight = window?.windowScene?.statusBarManager?.statusBarFrame.height
+        let innerBounds = UIScreen.main.bounds.inset(by: UIEdgeInsets(top: statusBarHeight!, left: 0, bottom: 0, right: 0))
+        for i in 0..<PAGES.count { // Update pages
+            let pageY = CGFloat(i) * innerBounds.height // Calculate the Y position for each page
+            subviews[i].frame = CGRect(x: 0, y: pageY, width: innerBounds.width, height: innerBounds.height)
+            subviews[i].layer.cornerRadius = 0
+        }
+        
+        contentSize = CGSize(width: innerBounds.width, height: innerBounds.height * CGFloat(PAGES.count))
     }
     
     func close() {

@@ -103,7 +103,6 @@ class FloatinItemView: UIScrollView {
         scrollView = ScrollView(frame: CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height))
         scrollView?.parentFloatingItemView = self
         addSubview(scrollView!)
-
     }
     
     @objc private func handlePan(_ gesture: UIPanGestureRecognizer) {
@@ -149,6 +148,8 @@ class FloatinItemView: UIScrollView {
                     // Low velocity, use a light impact style
                     impactFeedbackLight?.impactOccurred()
                 }
+            
+                // TODO: Add constraints - in boundary
 
             case .ended:
                 UIView.animate(
@@ -232,7 +233,7 @@ class FloatinItemView: UIScrollView {
             x: paddingX,
             y: paddingY + statusBarHeight!, // Add statusBarHeight to the Y coordinate
             width: innerBounds.width - (2 * paddingX),
-            height: innerBounds.height - (2 * paddingY)   
+            height: innerBounds.height - (2 * paddingY)
         )
 
         UIView.animate(withDuration: 0.3, animations: {

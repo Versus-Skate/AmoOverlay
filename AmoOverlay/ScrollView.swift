@@ -58,6 +58,7 @@ class ScrollView: UIScrollView {
             blue: CGFloat(0) / 255.0,
             alpha: 1
         )
+        
         backgroundColor = _backgroundColor
         
         // Add your content pages here
@@ -94,6 +95,29 @@ class ScrollView: UIScrollView {
     func close() {
         isScrollEnabled = false
     }
+    
+    func updateCurrentIndex() {
+        let pageHeight = frame.height
+        let newPageIndex = Int(round(contentOffset.y / pageHeight))
+        currentPageIndex = newPageIndex
+        print(currentPageIndex)
+    }
+    
+    func updateCornerRadius() {
+        // Calculate the corner radius based on the scroll offset
+        let maxCornerRadius: CGFloat = 20.0 // Adjust the maximum corner radius as needed
+
+        let scrollOffset = contentOffset.y
+        // Calculate the corner radius based on the scroll offset
+        let cornerRadius = max(maxCornerRadius - scrollOffset, 0)
+        
+        // Apply the corner radius to the layer
+        let maskedCorners: CACornerMask = [.layerMinXMinYCorner, .layerMaxXMinYCorner] // Top left and top right corners
+        subviews[0].layer.cornerRadius = cornerRadius
+        subviews[0].layer.maskedCorners = maskedCorners
+    }
+    
+    
 }
 
 extension ScrollView: UIScrollViewDelegate {
@@ -110,12 +134,8 @@ extension ScrollView: UIScrollViewDelegate {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        // Calculate the current page index based on the content offset
-        let pageHeight = frame.height
-        let newPageIndex = Int(round(contentOffset.y / pageHeight))
-        
-        // Update the current page index
-        currentPageIndex = newPageIndex
+        updateCurrentIndex()
+        updateCornerRadius()
     }
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {

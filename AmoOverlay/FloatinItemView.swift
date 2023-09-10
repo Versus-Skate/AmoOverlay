@@ -264,10 +264,9 @@ class FloatinItemView: UIScrollView {
             height: innerBounds.height
         )
         
-        layer.cornerRadius = 0
-        
         UIView.animate(withDuration: 0.3, animations: {
             self.frame = newFrame
+            self.layer.cornerRadius = 0
         }) { (_) in
             // This closure is called when the animation is complete.
             self.isExpanded = true

@@ -88,7 +88,6 @@ class ScrollView: UIScrollView {
     }
     
     func expand() {
-        
         isScrollEnabled = true
     }
     
@@ -135,7 +134,7 @@ extension ScrollView: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         updateCurrentIndex()
-        updateCornerRadius()
+//        updateCornerRadius()
     }
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {

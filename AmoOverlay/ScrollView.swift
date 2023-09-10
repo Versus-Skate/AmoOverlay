@@ -106,7 +106,6 @@ class ScrollView: UIScrollView {
         let pageHeight = frame.height
         let newPageIndex = Int(round(contentOffset.y / pageHeight))
         currentPageIndex = newPageIndex
-        print(currentPageIndex)
     }
     
     func updateCornerRadius() {

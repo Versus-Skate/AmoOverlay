@@ -58,6 +58,8 @@ class ScrollView: UIScrollView {
         showsVerticalScrollIndicator = false
         showsHorizontalScrollIndicator = false
         delegate = self
+        contentInset = .zero
+
         
         let _backgroundColor = UIColor(
             red: CGFloat(0) / 255.0,

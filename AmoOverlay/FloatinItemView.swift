@@ -155,8 +155,8 @@ class FloatinItemView: UIScrollView {
                     // Low velocity, use a light impact style
                     impactFeedbackLight?.impactOccurred()
                 }
+                print(frame.origin)
             
-                // TODO: Add constraints - in boundary
 
             case .ended:
                 UIView.animate(
@@ -179,6 +179,9 @@ class FloatinItemView: UIScrollView {
             
                 // Gesture ended, clean up the feedback generator
                 impactFeedback = nil
+                impactFeedbackLight = nil
+                impactFeedbackHeavy = nil
+                moveToBounds()
 
             default:
                 break
@@ -301,5 +304,81 @@ class FloatinItemView: UIScrollView {
         
         self.scrollView?.close()
         self.buttonView?.hide()
+    }
+    
+    private func moveToBounds() {
+        var topBound: CGFloat
+        var bottomBound: CGFloat
+        var leftBound: CGFloat
+        var rightBound: CGFloat
+        
+        if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
+            let safeAreaInsets = window.safeAreaInsets
+            topBound = safeAreaInsets.top
+            bottomBound = UIScreen.main.bounds.height - safeAreaInsets.bottom
+            leftBound = safeAreaInsets.left
+            rightBound = UIScreen.main.bounds.width - safeAreaInsets.right
+        } else {
+            topBound = 0
+            bottomBound = UIScreen.main.bounds.height
+            leftBound = 0
+            rightBound = UIScreen.main.bounds.width
+        }
+        
+        
+        if (self.frame.origin.x < leftBound) { // left
+            UIView.animate(
+                withDuration: 0.4,
+                delay: 0,
+                usingSpringWithDamping: 0.3,
+                initialSpringVelocity: 0.2,
+                options: .curveEaseIn,
+                animations: {
+                    self.frame.origin.x = leftBound
+                },
+                completion: nil
+            )
+        }
+        if (self.frame.origin.x > rightBound - (originalFrame?.width ?? 80)) { // right
+            UIView.animate(
+                withDuration: 0.4,
+                delay: 0,
+                usingSpringWithDamping: 0.3,
+                initialSpringVelocity: 0.2,
+                options: .curveEaseIn,
+                animations: {
+                    self.frame.origin.x = rightBound - (self.originalFrame?.width ?? 80)
+                },
+                completion: nil
+            )
+        }
+        
+        if (self.frame.origin.y < topBound) { // up
+            UIView.animate(
+                withDuration: 0.4,
+                delay: 0,
+                usingSpringWithDamping: 0.3,
+                initialSpringVelocity: 0.2,
+                options: .curveEaseIn,
+                animations: {
+                    self.frame.origin.y = topBound
+                },
+                completion: nil
+            )
+        }
+        
+        if (self.frame.origin.y > bottomBound - (self.originalFrame?.height ?? 80)) { // bottom
+            UIView.animate(
+                withDuration: 0.4,
+                delay: 0,
+                usingSpringWithDamping: 0.3,
+                initialSpringVelocity: 0.2,
+                options: .curveEaseIn,
+                animations: {
+                    self.frame.origin.y = bottomBound - (self.originalFrame?.height ?? 80)
+                },
+                completion: nil
+            )
+        }
     }
 }

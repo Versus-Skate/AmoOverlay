@@ -297,6 +297,7 @@ class FloatinItemView: UIScrollView {
     }
     
     func closeView() {
+        self.scrollView?.close()
 
         if let originalFrame = originalFrame {
             UIView.animate(
@@ -313,7 +314,6 @@ class FloatinItemView: UIScrollView {
                 // This closure is called when the animation is complete.
                 self.isOpen = false
                 self.isExpanded = false
-                self.scrollView?.close()
             }
         }
         

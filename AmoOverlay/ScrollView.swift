@@ -107,6 +107,19 @@ class ScrollView: UIScrollView {
     
     func close() {
         isScrollEnabled = false
+        
+        // On close, we need to adjust the contentOffset of the scroll view to avoid seeing the background if we close from scrolling
+        if (isExpanded) {
+            if (currentPageIndex == 0) {
+                self.contentOffset.y = 0
+            }
+            if (currentPageIndex == PAGES.count - 1) {
+                print(self.bounds.maxY)
+                self.contentOffset.y = self.bounds.maxY  - UIScreen.main.bounds.height
+            }
+        }
+        
+        
     }
     
     func updateCurrentIndex() {

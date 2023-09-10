@@ -296,22 +296,7 @@ class FloatinItemView: UIScrollView {
         self.scrollView?.expand()
     }
     
-    func closeView(fromInitialYOffset: CGFloat = 0) {
-        
-        // From closing by dragging in expanded view
-        // Set offset first to avoid black background appears related to bouncyness
-        if abs(fromInitialYOffset) > 0 {
-            let setOffsetTo: CGFloat
-            if (fromInitialYOffset < 0) {
-                setOffsetTo = 20
-                UIView.animate(
-                    withDuration: 0.1,
-                    animations: {
-                        self.scrollView!.contentOffset.y = setOffsetTo
-                    }
-                )
-            }
-        }
+    func closeView() {
 
         if let originalFrame = originalFrame {
             UIView.animate(

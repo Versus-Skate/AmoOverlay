@@ -153,11 +153,11 @@ extension ScrollView: UIScrollViewDelegate {
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         
         if currentPageIndex == 0 && velocity.y < 0 {
-            parentFloatingItemView?.closeView(fromInitialYOffset: contentOffset.y)
+            parentFloatingItemView?.closeView()
         }
         
         if currentPageIndex == PAGES.count - 1 && velocity.y > 0 {
-            parentFloatingItemView?.closeView(fromInitialYOffset: contentOffset.y)
+            parentFloatingItemView?.closeView()
         }
 
     }

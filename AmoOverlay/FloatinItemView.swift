@@ -290,16 +290,18 @@ class FloatinItemView: UIScrollView {
     
     func closeView() {
         
-        self.layer.cornerRadius = 80 // decrease the fact that the height dimishes more rapidly than the cornerRadius
-        if let originalFrame = originalFrame {
-            UIView.animate(withDuration: 0.3, animations: {
-                self.frame = originalFrame
-                self.layer.cornerRadius = self.cornerRadius
+        UIView.animate(withDuration: 0.3, animations: {
+            // Apply a transform to scale the view down from its center
+            self.transform = CGAffineTransform(scaleX: 0.2, y: 0.1)
+            self.frame.origin = self.originalFrame!.origin
+            self.layer.cornerRadius = self.cornerRadius * 5
         }) { (_) in
-                // This closure is called when the animation is complete.
-                self.isOpen = false
-                self.isExpanded = false
-            }
+            // This completion block is called when the animation completes
+            self.transform = .identity
+            self.frame = self.originalFrame!
+            self.layer.cornerRadius = self.cornerRadius
+            self.isOpen = false
+            self.isExpanded = false
         }
         
         self.scrollView?.close()

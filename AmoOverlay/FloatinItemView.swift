@@ -82,7 +82,14 @@ class FloatinItemView: UIScrollView {
         // Customize the appearance of your view here
         layer.cornerRadius = cornerRadius
         
-        backgroundColor = UIColor(red: CGFloat(0) / 3.0, green: 0.5, blue: 0.8, alpha: 1.0)
+        let _backgroundColor = UIColor(
+            red: CGFloat(0) / 255.0,
+            green: CGFloat(0) / 255.0,
+            blue: CGFloat(0) / 255.0,
+            alpha: 0
+        )
+        backgroundColor = _backgroundColor
+        clipsToBounds = true // we will handle closing animations with this view cornerRadius -> we need to clips subview to bounds
         
         // Add a pan gesture recognizer
         let panGesture = ImmediatePanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
@@ -280,22 +287,17 @@ class FloatinItemView: UIScrollView {
     }
     
     func closeView() {
-        // If closed, animate the view back to the original size
-        layer.cornerRadius = cornerRadius
         
         if let originalFrame = originalFrame {
             UIView.animate(withDuration: 0.3, animations: {
                 self.frame = originalFrame
+                self.layer.cornerRadius = self.cornerRadius
         }) { (_) in
             // This closure is called when the animation is complete.
             self.isOpen = false
             self.isExpanded = false
             }
         }
-        
-        UIView.animate(withDuration: 0.3, animations: {
-            self.scrollView!.frame = self.bounds
-        })
         
         self.scrollView?.close()
         self.buttonView?.hide()

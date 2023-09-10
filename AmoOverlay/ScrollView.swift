@@ -85,7 +85,7 @@ class ScrollView: UIScrollView {
     }
     
     func open(fullScreenBounds: CGRect) {
-        for i in 0..<PAGES.count { // Create 3 pages
+        for i in 0..<PAGES.count { // Update pages
             let pageY = CGFloat(i) * fullScreenBounds.height // Calculate the Y position for each page
             subviews[i].frame = CGRect(x: 0, y: pageY, width: fullScreenBounds.width, height: fullScreenBounds.height)
             subviews[i].layer.cornerRadius = 0

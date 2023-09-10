@@ -149,13 +149,12 @@ class FloatinItemView: UIScrollView {
             
                 if velocity.y > 500 {
                     impactFeedbackHeavy?.impactOccurred()
-                } else if velocity.y > 100 {
+                } else if velocity.y > 300 {
                     impactFeedback?.impactOccurred()
                 } else {
                     // Low velocity, use a light impact style
                     impactFeedbackLight?.impactOccurred()
                 }
-                print(frame.origin)
             
 
             case .ended:
@@ -312,26 +311,23 @@ class FloatinItemView: UIScrollView {
         var leftBound: CGFloat
         var rightBound: CGFloat
         
-        if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
-            let safeAreaInsets = window.safeAreaInsets
-            topBound = safeAreaInsets.top
-            bottomBound = UIScreen.main.bounds.height - safeAreaInsets.bottom
-            leftBound = safeAreaInsets.left
-            rightBound = UIScreen.main.bounds.width - safeAreaInsets.right
-        } else {
-            topBound = 0
-            bottomBound = UIScreen.main.bounds.height
-            leftBound = 0
-            rightBound = UIScreen.main.bounds.width
-        }
+        let safeAreaInsets = window?.safeAreaInsets ?? .zero
+        topBound = safeAreaInsets.top
+        bottomBound = UIScreen.main.bounds.height - safeAreaInsets.bottom
+        leftBound = safeAreaInsets.left
+        rightBound = UIScreen.main.bounds.width - safeAreaInsets.right
+        
+        let duration: CGFloat = 0.2
+        let damping: CGFloat = 0.6
+        let initialSpringVelocity: CGFloat = 0
         
         
         if (self.frame.origin.x < leftBound) { // left
             UIView.animate(
-                withDuration: 0.4,
+                withDuration: duration,
                 delay: 0,
-                usingSpringWithDamping: 0.3,
-                initialSpringVelocity: 0.2,
+                usingSpringWithDamping: damping,
+                initialSpringVelocity: initialSpringVelocity,
                 options: .curveEaseIn,
                 animations: {
                     self.frame.origin.x = leftBound
@@ -341,10 +337,10 @@ class FloatinItemView: UIScrollView {
         }
         if (self.frame.origin.x > rightBound - (originalFrame?.width ?? 80)) { // right
             UIView.animate(
-                withDuration: 0.4,
+                withDuration: duration,
                 delay: 0,
-                usingSpringWithDamping: 0.3,
-                initialSpringVelocity: 0.2,
+                usingSpringWithDamping: damping,
+                initialSpringVelocity: initialSpringVelocity,
                 options: .curveEaseIn,
                 animations: {
                     self.frame.origin.x = rightBound - (self.originalFrame?.width ?? 80)
@@ -355,10 +351,10 @@ class FloatinItemView: UIScrollView {
         
         if (self.frame.origin.y < topBound) { // up
             UIView.animate(
-                withDuration: 0.4,
+                withDuration: duration,
                 delay: 0,
-                usingSpringWithDamping: 0.3,
-                initialSpringVelocity: 0.2,
+                usingSpringWithDamping: damping,
+                initialSpringVelocity: initialSpringVelocity,
                 options: .curveEaseIn,
                 animations: {
                     self.frame.origin.y = topBound
@@ -369,10 +365,10 @@ class FloatinItemView: UIScrollView {
         
         if (self.frame.origin.y > bottomBound - (self.originalFrame?.height ?? 80)) { // bottom
             UIView.animate(
-                withDuration: 0.4,
+                withDuration: duration,
                 delay: 0,
-                usingSpringWithDamping: 0.3,
-                initialSpringVelocity: 0.2,
+                usingSpringWithDamping: damping,
+                initialSpringVelocity: initialSpringVelocity,
                 options: .curveEaseIn,
                 animations: {
                     self.frame.origin.y = bottomBound - (self.originalFrame?.height ?? 80)

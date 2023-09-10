@@ -18,7 +18,6 @@ class WelcomeViewController: UIViewController {
         super.viewDidLoad()
         
         navigationController?.isNavigationBarHidden = true
-        print(self.view.safeAreaLayoutGuide)
 
         let _backgroundColor = UIColor(
             red: CGFloat(0) / 255.0,

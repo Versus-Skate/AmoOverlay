@@ -59,7 +59,7 @@ class ScrollView: UIScrollView {
         showsHorizontalScrollIndicator = false
         delegate = self
         contentInset = .zero
-        clipsToBounds = true
+//        clipsToBounds = true
 
         
         let _backgroundColor = UIColor(
@@ -83,7 +83,7 @@ class ScrollView: UIScrollView {
         }
         
         // Set the content size to accommodate all pages
-        contentSize = CGSize(width: pageWidth, height: pageHeight * CGFloat(3))
+        contentSize = CGSize(width: pageWidth, height: pageHeight * CGFloat(PAGES.count))
     }
     
     func open() {
@@ -153,11 +153,11 @@ extension ScrollView: UIScrollViewDelegate {
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         
         if currentPageIndex == 0 && velocity.y < 0 {
-            parentFloatingItemView?.closeView()
+            parentFloatingItemView?.closeView(fromInitialYOffset: contentOffset.y)
         }
         
         if currentPageIndex == PAGES.count - 1 && velocity.y > 0 {
-            parentFloatingItemView?.closeView()
+            parentFloatingItemView?.closeView(fromInitialYOffset: contentOffset.y)
         }
 
     }

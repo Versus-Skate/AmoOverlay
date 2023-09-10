@@ -248,10 +248,10 @@ class FloatinItemView: UIScrollView {
         )
 
         UIView.animate(
-            withDuration: 0.3,
+            withDuration: 0.4,
             delay: 0,
-            usingSpringWithDamping: 0.8,
-            initialSpringVelocity: 0,
+            usingSpringWithDamping: 0.75,
+            initialSpringVelocity: -0.1,
             options: .curveEaseIn,
             animations: {
                 self.frame = newFrame
@@ -296,23 +296,42 @@ class FloatinItemView: UIScrollView {
         self.scrollView?.expand()
     }
     
-    func closeView() {
+    func closeView(fromInitialYOffset: CGFloat = 0) {
         
-        self.layer.cornerRadius = 20 // decrease the fact that the height dimishes more rapidly than the cornerRadius
-        if let originalFrame = originalFrame {
-            UIView.animate(withDuration: 0.3, animations: {
-                self.frame = originalFrame
-                self.layer.cornerRadius = self.cornerRadius
-                self.layer.masksToBounds = true // Ensures content inside is also clipped to the rounded corners
+        // From closing by dragging in expanded view
+        // Set offset first to avoid black background appears related to bouncyness
+        if abs(fromInitialYOffset) > 0 {
+            let setOffsetTo: CGFloat
+            if (fromInitialYOffset < 0) {
+                setOffsetTo = 20
+                UIView.animate(
+                    withDuration: 0.1,
+                    animations: {
+                        self.scrollView!.contentOffset.y = setOffsetTo
+                    }
+                )
+            }
+        }
 
-        }) { (_) in
+        if let originalFrame = originalFrame {
+            UIView.animate(
+                withDuration: 0.4,
+                delay: 0,
+                usingSpringWithDamping: 0.8,
+                initialSpringVelocity: 0,
+                options: .curveEaseIn,
+                animations: {
+                    self.frame = originalFrame
+                    self.layer.cornerRadius = self.cornerRadius
+                }
+            ) { (_) in
                 // This closure is called when the animation is complete.
                 self.isOpen = false
                 self.isExpanded = false
+                self.scrollView?.close()
             }
         }
         
-        self.scrollView?.close()
         self.buttonView?.hide()
     }
     

@@ -15,6 +15,13 @@ class GestureDelegateScroll: NSObject, UIGestureRecognizerDelegate {
 }
 
 
+let PAGES = [
+    UIColor(red: CGFloat(0) / 3.0, green: 0.5, blue: 0.8, alpha: 1.0),
+    UIColor(red: CGFloat(1) / 3.0, green: 0.5, blue: 0.8, alpha: 1.0),
+    UIColor(red: CGFloat(2) / 3.0, green: 0.5, blue: 0.8, alpha: 1.0)
+]
+
+
 class ScrollView: UIScrollView {
     weak var parentFloatingItemView: FloatinItemView? // Reference to the parent floating item
     private let closeThreshold: CGFloat = 0.8 // Adjust the threshold as needed (0.8 means 80% of the page must be visible)
@@ -65,10 +72,10 @@ class ScrollView: UIScrollView {
         let pageWidth = frame.width
         let pageHeight = frame.height
 
-        for i in 0..<3 { // Create 3 pages
+        for i in 0..<PAGES.count  { // Create 3 pages
             let pageFrame = CGRect(x: 0, y: CGFloat(i) * pageHeight, width: pageWidth, height: pageHeight)
             let pageView = UIView(frame: pageFrame)
-            pageView.backgroundColor = UIColor(red: CGFloat(i) / 3.0, green: 0.5, blue: 0.8, alpha: 1.0) // Random background color for demonstration
+            pageView.backgroundColor = PAGES[i]
             pageView.layer.cornerRadius = 0
             addSubview(pageView)
         }
@@ -78,13 +85,13 @@ class ScrollView: UIScrollView {
     }
     
     func open(fullScreenBounds: CGRect) {
-        for i in 0..<3 { // Create 3 pages
+        for i in 0..<PAGES.count { // Create 3 pages
             let pageY = CGFloat(i) * fullScreenBounds.height // Calculate the Y position for each page
             subviews[i].frame = CGRect(x: 0, y: pageY, width: fullScreenBounds.width, height: fullScreenBounds.height)
             subviews[i].layer.cornerRadius = 0
         }
         
-        contentSize = CGSize(width: fullScreenBounds.width, height: fullScreenBounds.height * CGFloat(3))
+        contentSize = CGSize(width: fullScreenBounds.width, height: fullScreenBounds.height * CGFloat(PAGES.count))
     }
     
     func expand() {
@@ -103,17 +110,17 @@ class ScrollView: UIScrollView {
     }
     
     func updateCornerRadius() {
-        // Calculate the corner radius based on the scroll offset
-        let maxCornerRadius: CGFloat = 20.0 // Adjust the maximum corner radius as needed
-
         let scrollOffset = contentOffset.y
-        // Calculate the corner radius based on the scroll offset
-        let cornerRadius = max(maxCornerRadius - scrollOffset, 0)
-        
-        // Apply the corner radius to the layer
-        let maskedCorners: CACornerMask = [.layerMinXMinYCorner, .layerMaxXMinYCorner] // Top left and top right corners
-        subviews[0].layer.cornerRadius = cornerRadius
-        subviews[0].layer.maskedCorners = maskedCorners
+        let maxCornerRadius: CGFloat = 20.0
+
+        if currentPageIndex == 0 && scrollOffset < 0 {
+            let cornerRadius = min(maxCornerRadius, abs(scrollOffset))
+            subviews[0].layer.cornerRadius = cornerRadius
+        } else if currentPageIndex == (PAGES.count - 1) && scrollOffset > CGFloat(PAGES.count - 1) * frame.height {
+            let cornerRadius = min(maxCornerRadius, abs(scrollOffset - CGFloat(PAGES.count - 1) * frame.height))
+            
+            subviews[currentPageIndex].layer.cornerRadius = cornerRadius
+        }
     }
     
     
@@ -134,7 +141,7 @@ extension ScrollView: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         updateCurrentIndex()
-//        updateCornerRadius()
+        updateCornerRadius()
     }
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
@@ -143,7 +150,7 @@ extension ScrollView: UIScrollViewDelegate {
             parentFloatingItemView?.closeView()
         }
         
-        if currentPageIndex == 2 && velocity.y > 0 {
+        if currentPageIndex == PAGES.count - 1 && velocity.y > 0 {
             parentFloatingItemView?.closeView()
         }
 

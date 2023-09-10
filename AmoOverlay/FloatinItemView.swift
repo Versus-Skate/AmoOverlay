@@ -149,12 +149,11 @@ class FloatinItemView: UIScrollView {
                 // Gesture is in progress
                 let velocity = gesture.velocity(in: self.superview)
             
-                if velocity.y > 500 {
+                if abs(velocity.y) > 500 {
                     impactFeedbackHeavy?.impactOccurred()
-                } else if velocity.y > 300 {
+                } else if abs(velocity.y) > 300 {
                     impactFeedback?.impactOccurred()
                 } else {
-                    // Low velocity, use a light impact style
                     impactFeedbackLight?.impactOccurred()
                 }
             

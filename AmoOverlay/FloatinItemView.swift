@@ -297,7 +297,7 @@ class FloatinItemView: UIScrollView {
     }
     
     func closeView() {
-        self.scrollView?.close()
+        let initialBackground = backgroundColor
 
         if let originalFrame = originalFrame {
             UIView.animate(
@@ -314,8 +314,10 @@ class FloatinItemView: UIScrollView {
                 // This closure is called when the animation is complete.
                 self.isOpen = false
                 self.isExpanded = false
+                self.scrollView?.backgroundColor = initialBackground
             }
         }
+        self.scrollView?.close()
         
         self.buttonView?.hide()
     }

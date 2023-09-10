@@ -108,17 +108,14 @@ class ScrollView: UIScrollView {
     func close() {
         isScrollEnabled = false
         
-        // On close, we need to adjust the contentOffset of the scroll view to avoid seeing the background if we close from scrolling
-        if (isExpanded) {
-            if (currentPageIndex == 0) {
-                self.contentOffset.y = 0
+        // Quick hack to avoid seeing the background when bouncing during close
+        UIView.animate(
+            withDuration: 0.1,
+            delay: 0,
+            animations: {
+                self.backgroundColor = PAGES[self.currentPageIndex]
             }
-            if (currentPageIndex == PAGES.count - 1) {
-                print(self.bounds.maxY)
-                self.contentOffset.y = self.bounds.maxY  - UIScreen.main.bounds.height
-            }
-        }
-        
+        )
         
     }
     

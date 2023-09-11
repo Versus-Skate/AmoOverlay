@@ -146,6 +146,10 @@ class FloatinItemView: UIScrollView {
                 impactFeedback?.impactOccurred()
 
             case .changed:
+                let translation = gesture.translation(in: self.superview)
+                center = CGPoint(x: center.x + translation.x, y: center.y + translation.y)
+                gesture.setTranslation(.zero, in: self.superview)
+            
                 // Gesture is in progress
                 let velocity = gesture.velocity(in: self.superview)
             
@@ -159,6 +163,36 @@ class FloatinItemView: UIScrollView {
             
 
             case .ended:
+                // Calculate the desired final position based on the current position, gesture's velocity, and screen bounds
+                let velocity = gesture.velocity(in: self.superview)
+                var finalCenter = center
+            
+                // Calculate the magnitude (speed) of the velocity vector
+                let speed = sqrt(velocity.x * velocity.x + velocity.y * velocity.y) // bounded to 1913
+            
+                let animationDuration = computeAnimationDuration(speed: speed)
+                
+                finalCenter.x = computeTargetX(velocity: gesture.velocity(in: self.superview), currentCenter: finalCenter)
+                finalCenter.y = computeTargetY(velocity: gesture.velocity(in: self.superview), currentCenter: finalCenter, animationDuration: animationDuration)
+            
+            
+                let damping = computeDamping(speed: speed)
+                let initialVelocity = computeInitialVelocity(velocity: velocity)
+
+                // Animate the view to the desired final position
+                UIView.animate(
+                    withDuration: animationDuration,
+                    delay: 0,
+                    usingSpringWithDamping: damping,
+                    initialSpringVelocity: sqrt(initialVelocity.dy * initialVelocity.dy + initialVelocity.dx * initialVelocity.dx),
+                    options: .curveEaseOut,
+                    animations: {
+                        self.center = finalCenter
+                    }
+                )
+            
+            
+                // Reset shape
                 UIView.animate(
                     withDuration: 0.1,
                     delay: 0,
@@ -171,7 +205,7 @@ class FloatinItemView: UIScrollView {
                     completion: nil
                 )
             
-                let velocity = gesture.velocity(in: self.superview)
+                // Open card
                 if velocity == .zero {
                     impactFeedback?.impactOccurred()
                     openView()
@@ -181,16 +215,12 @@ class FloatinItemView: UIScrollView {
                 impactFeedback = nil
                 impactFeedbackLight = nil
                 impactFeedbackHeavy = nil
-                moveToBounds()
-
+                 
+            
             default:
                 break
         }
         
-        
-        let translation = gesture.translation(in: self.superview)
-        center = CGPoint(x: center.x + translation.x, y: center.y + translation.y)
-        gesture.setTranslation(.zero, in: self.superview)
     }
     
     @objc private func handleSwipeDown(_ gesture: UISwipeGestureRecognizer) {
@@ -321,76 +351,56 @@ class FloatinItemView: UIScrollView {
         self.buttonView?.hide()
     }
     
-    private func moveToBounds() {
-        var topBound: CGFloat
-        var bottomBound: CGFloat
-        var leftBound: CGFloat
-        var rightBound: CGFloat
+    private func computeTargetX(velocity: CGPoint, currentCenter: CGPoint) -> CGFloat {
+        let statusBarHeight = window?.windowScene?.statusBarManager?.statusBarFrame.height
+        let screenBounds = UIScreen.main.bounds.inset(by: UIEdgeInsets(top: statusBarHeight!, left: 0, bottom: 0, right: 0))
         
-        let safeAreaInsets = window?.safeAreaInsets ?? .zero
-        topBound = safeAreaInsets.top
-        bottomBound = UIScreen.main.bounds.height - safeAreaInsets.bottom
-        leftBound = safeAreaInsets.left
-        rightBound = UIScreen.main.bounds.width - safeAreaInsets.right
-        
-        let duration: CGFloat = 0.2
-        let damping: CGFloat = 0.5
-        let initialSpringVelocity: CGFloat = 0.2
-        
-        
-        if (self.frame.origin.x < leftBound) { // left
-            UIView.animate(
-                withDuration: duration,
-                delay: 0,
-                usingSpringWithDamping: damping,
-                initialSpringVelocity: initialSpringVelocity,
-                options: .curveEaseIn,
-                animations: {
-                    self.frame.origin.x = leftBound
-                },
-                completion: nil
-            )
-        }
-        if (self.frame.origin.x > rightBound - (originalFrame?.width ?? 80)) { // right
-            UIView.animate(
-                withDuration: duration,
-                delay: 0,
-                usingSpringWithDamping: damping,
-                initialSpringVelocity: initialSpringVelocity,
-                options: .curveEaseIn,
-                animations: {
-                    self.frame.origin.x = rightBound - (self.originalFrame?.width ?? 80)
-                },
-                completion: nil
-            )
-        }
-        
-        if (self.frame.origin.y < topBound) { // up
-            UIView.animate(
-                withDuration: duration,
-                delay: 0,
-                usingSpringWithDamping: damping,
-                initialSpringVelocity: initialSpringVelocity,
-                options: .curveEaseIn,
-                animations: {
-                    self.frame.origin.y = topBound
-                },
-                completion: nil
-            )
-        }
-        
-        if (self.frame.origin.y > bottomBound - (self.originalFrame?.height ?? 80)) { // bottom
-            UIView.animate(
-                withDuration: duration,
-                delay: 0,
-                usingSpringWithDamping: damping,
-                initialSpringVelocity: initialSpringVelocity,
-                options: .curveEaseIn,
-                animations: {
-                    self.frame.origin.y = bottomBound - (self.originalFrame?.height ?? 80)
-                },
-                completion: nil
-            )
+        // Stick to a side on the x
+        if velocity.x > 0 {
+            let maxX = screenBounds.maxX - frame.width / 2
+            return min(currentCenter.x + velocity.x * 100, maxX)
+        } else {
+            let minX = screenBounds.minX + frame.width / 2
+            return max(currentCenter.x + velocity.x * 100, minX)
         }
     }
+    
+    private func computeTargetY(velocity: CGPoint, currentCenter: CGPoint, animationDuration: CGFloat) -> CGFloat {
+        let statusBarHeight = window?.windowScene?.statusBarManager?.statusBarFrame.height
+        let screenBounds = UIScreen.main.bounds.inset(by: UIEdgeInsets(top: statusBarHeight!, left: 0, bottom: 0, right: 0))
+        
+        if velocity.y > 0 { // goes down
+            let maxY = screenBounds.maxY - frame.width / 2
+            let projectedY = currentCenter.y + velocity.y * animationDuration * (screenBounds.width - currentCenter.x) / screenBounds.width
+            return min(projectedY, maxY)
+            
+        } else { // goes up
+            let minY = screenBounds.minY + frame.width / 2
+            let projectedY = currentCenter.y + velocity.y * animationDuration  * (screenBounds.width - currentCenter.x) / screenBounds.width
+            return max(projectedY, minY)
+        }
+    }
+    
+    private func computeDamping(speed: CGFloat) -> CGFloat {
+        let minDamping: CGFloat = 0.3 // Minimum damping for realistic bounce
+        let maxDamping: CGFloat = 0.6 // Maximum damping for minimal bounce
+        let dampingRange = maxDamping - minDamping
+        let damping = max(minDamping, min(maxDamping, 1.0 - speed / 2000.0 * dampingRange))
+        return damping
+    }
+    
+    private func computeInitialVelocity(velocity: CGPoint) -> CGVector {
+        let initialVelocity = CGVector(dx: velocity.x / 1000.0, dy: velocity.y / 1000.0)
+        return initialVelocity
+    }
+    
+    private func computeAnimationDuration(speed: CGFloat) -> CGFloat {
+        let minDuration: CGFloat = 0.3 // Minimum animation duration
+        let maxDuration: CGFloat = 0.8 // Maximum animation duration
+        let durationRange = maxDuration - minDuration
+        let animationDuration = max(minDuration, min(maxDuration, Double(speed / 2000.0 * durationRange)))
+        return animationDuration
+    }
 }
+
+

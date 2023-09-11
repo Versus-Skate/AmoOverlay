@@ -148,9 +148,8 @@ class FloatinItemView: UIScrollView {
             case .changed:
                 let velocity = gesture.velocity(in: self.superview)
                 let translation = gesture.translation(in: self.superview)
-                let speed = sqrt(velocity.x * velocity.x + velocity.y * velocity.y) // bounded to 1913
+                
                 // Add small delay on drag
-            
                 let animationDuration: TimeInterval = 0.5
                 let delayDuration: TimeInterval = 0
                 let damping: CGFloat = 0.4

@@ -146,13 +146,35 @@ class FloatinItemView: UIScrollView {
                 impactFeedback?.impactOccurred()
 
             case .changed:
-                let translation = gesture.translation(in: self.superview)
-                center = CGPoint(x: center.x + translation.x, y: center.y + translation.y)
-                gesture.setTranslation(.zero, in: self.superview)
-            
-                // Gesture is in progress
                 let velocity = gesture.velocity(in: self.superview)
+                let translation = gesture.translation(in: self.superview)
+                let speed = sqrt(velocity.x * velocity.x + velocity.y * velocity.y) // bounded to 1913
+                // Add small delay on drag
             
+                let animationDuration: TimeInterval = 0.5
+                let delayDuration: TimeInterval = 0
+                let damping: CGFloat = 0.4
+
+                // Calculate the final center position based on the translation
+                let finalCenter = CGPoint(x: center.x + translation.x, y: center.y + translation.y)
+
+                gesture.setTranslation(.zero, in: self.superview)
+                UIView.animate(
+                    withDuration: animationDuration,
+                    delay: delayDuration,
+                    usingSpringWithDamping: damping,
+                    initialSpringVelocity: 1,
+                    options: .curveEaseOut,
+                    animations: {
+                        self.center = finalCenter
+                    },
+                    completion: { _ in
+                        gesture.setTranslation(.zero, in: self.superview)
+                        // Animation completion code (if needed)
+                    }
+                )
+        
+                // Add haptic
                 if abs(velocity.y) > 500 {
                     impactFeedbackHeavy?.impactOccurred()
                 } else if abs(velocity.y) > 300 {
@@ -188,6 +210,10 @@ class FloatinItemView: UIScrollView {
                     options: .curveEaseInOut,
                     animations: {
                         self.center = finalCenter
+                    },
+                    completion:  { _ in
+                        gesture.setTranslation(.zero, in: self.superview)
+                        // Animation completion code (if needed)
                     }
                 )
             

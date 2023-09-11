@@ -177,7 +177,7 @@ class FloatinItemView: UIScrollView {
             
             
                 let damping = computeDamping(speed: speed)
-                let initialVelocity = computeInitialVelocity(velocity: velocity)
+                let initialVelocity = computeInitialVelocity(velocity: velocity, animationDuration: animationDuration)
 
                 // Animate the view to the desired final position
                 UIView.animate(
@@ -185,7 +185,7 @@ class FloatinItemView: UIScrollView {
                     delay: 0,
                     usingSpringWithDamping: damping,
                     initialSpringVelocity: sqrt(initialVelocity.dy * initialVelocity.dy + initialVelocity.dx * initialVelocity.dx),
-                    options: .curveEaseOut,
+                    options: .curveEaseInOut,
                     animations: {
                         self.center = finalCenter
                     }
@@ -383,20 +383,20 @@ class FloatinItemView: UIScrollView {
     
     private func computeDamping(speed: CGFloat) -> CGFloat {
         let minDamping: CGFloat = 0.3 // Minimum damping for realistic bounce
-        let maxDamping: CGFloat = 0.6 // Maximum damping for minimal bounce
+        let maxDamping: CGFloat = 0.5 // Maximum damping for minimal bounce
         let dampingRange = maxDamping - minDamping
         let damping = max(minDamping, min(maxDamping, 1.0 - speed / 2000.0 * dampingRange))
         return damping
     }
     
-    private func computeInitialVelocity(velocity: CGPoint) -> CGVector {
-        let initialVelocity = CGVector(dx: velocity.x / 1000.0, dy: velocity.y / 1000.0)
+    private func computeInitialVelocity(velocity: CGPoint, animationDuration: CGFloat) -> CGVector {
+        let initialVelocity = CGVector(dx: velocity.x * animationDuration / UIScreen.main.bounds.width, dy: velocity.y * animationDuration / UIScreen.main.bounds.height)
         return initialVelocity
     }
     
     private func computeAnimationDuration(speed: CGFloat) -> CGFloat {
         let minDuration: CGFloat = 0.3 // Minimum animation duration
-        let maxDuration: CGFloat = 0.8 // Maximum animation duration
+        let maxDuration: CGFloat = 0.6 // Maximum animation duration
         let durationRange = maxDuration - minDuration
         let animationDuration = max(minDuration, min(maxDuration, Double(speed / 2000.0 * durationRange)))
         return animationDuration

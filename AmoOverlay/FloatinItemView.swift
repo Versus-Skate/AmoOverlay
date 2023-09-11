@@ -334,8 +334,8 @@ class FloatinItemView: UIScrollView {
         rightBound = UIScreen.main.bounds.width - safeAreaInsets.right
         
         let duration: CGFloat = 0.2
-        let damping: CGFloat = 0.6
-        let initialSpringVelocity: CGFloat = 0
+        let damping: CGFloat = 0.5
+        let initialSpringVelocity: CGFloat = 0.2
         
         
         if (self.frame.origin.x < leftBound) { // left

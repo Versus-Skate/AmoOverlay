@@ -27,7 +27,7 @@ class WelcomeViewController: UIViewController {
         )
         self.view.backgroundColor = _backgroundColor
         
-        let floatinItemView = FloatinItemView(frame: CGRect(x: 100, y: 100, width: 80, height: 80))
+        let floatinItemView = FloatinItemView(frame: CGRect(x: 0, y: UIScreen.main.bounds.height / 2, width: 80, height: 80))
         self.view.addSubview(floatinItemView)
         
         let buttonView = CloseButton(frame: CGRect(

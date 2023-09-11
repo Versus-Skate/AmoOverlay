@@ -383,10 +383,10 @@ class FloatinItemView: UIScrollView {
         // Stick to a side on the x
         if velocity.x > 0 {
             let maxX = screenBounds.maxX - frame.width / 2
-            return min(currentCenter.x + velocity.x * 100, maxX)
+            return maxX
         } else {
             let minX = screenBounds.minX + frame.width / 2
-            return max(currentCenter.x + velocity.x * 100, minX)
+            return minX
         }
     }
     
